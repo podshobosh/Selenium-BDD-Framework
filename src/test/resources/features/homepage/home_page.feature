@@ -6,7 +6,7 @@ Feature: Verifying HomePage Main Functionalities
     Then The page should have the title "Home - My Digital Notebook"
     And The page URL should be "https://seleniums.com/"
 
-  @UI
+  @UI @TestHere
   Scenario: Verify the top page search functionality
     Then the top search button should be present
     When I click on the search button

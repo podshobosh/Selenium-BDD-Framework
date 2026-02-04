@@ -20,7 +20,7 @@ public class DriverFactory {
 
          // Defensive config handling
         String browser = ConfigReader.getProperty("browser","chrome" ).trim().toLowerCase();
-        String headless = ConfigReader.getProperty("headless", "false");
+        String headless = ConfigReader.getProperty("headless", "false").trim().toLowerCase();
 
 
         try {
