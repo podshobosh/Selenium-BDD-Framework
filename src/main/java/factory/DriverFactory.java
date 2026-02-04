@@ -17,8 +17,11 @@ public class DriverFactory {
 
     // Method to initialize the WebDriver
     public static WebDriver initializeDriver() {
-        String browser = ConfigReader.getProperty("browser");
-        String headless = ConfigReader.getProperty("headless");
+
+         // Defensive config handling
+        String browser = ConfigReader.getProperty("browser","chrome" ).trim().toLowerCase();
+        String headless = ConfigReader.getProperty("headless", "false");
+
 
         try {
             switch (browser) {
