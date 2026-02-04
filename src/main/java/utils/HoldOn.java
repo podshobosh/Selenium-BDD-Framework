@@ -161,6 +161,16 @@ public class HoldOn {
         }
     }
 
+    public static void waitForTextToBePresent(
+            WebDriver driver,
+            WebElement element,
+            String expectedText
+    ) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.textToBePresentInElementValue(element, expectedText));
+    }
+
+
 
 
 

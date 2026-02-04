@@ -1,5 +1,6 @@
 package hooks;
 
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.After;
 import io.cucumber.java.Scenario;
@@ -52,6 +53,11 @@ public class Hooks {
         Log.info("Scenario Status: " + scenario.getStatus());
         Log.info("=============================================================");
 
+    }
+
+    @AfterAll
+    public static void afterAll(){ // static hooks
         ExtentReportManager.flush();
     }
+
 }

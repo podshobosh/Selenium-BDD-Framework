@@ -22,24 +22,20 @@ public class ScreenshotUtils {
      */
     public static String takeScreenshot(WebDriver driver, String testName) {
         try {
-            // Generate timestamp and file name
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String screenshotPath = SCREENSHOT_DIR + File.separator + testName + "_" + timestamp + ".png";
+            String fileName = testName + "_" + timestamp + ".png";
 
-            // Take screenshot as a file
             File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            File destFile = new File(screenshotPath);
+            File destFile = new File(SCREENSHOT_DIR + File.separator + fileName);
 
-            // Ensure the directory exists
             if (!destFile.getParentFile().exists()) {
                 destFile.getParentFile().mkdirs();
             }
 
-            // Copy the screenshot to the destination
             FileUtils.copyFile(srcFile, destFile);
 
-            Log.info("Screenshot saved at the designated directory");
-            return destFile.getAbsolutePath();
+            Log.info("Screenshot saved at Reports/screenshots/");
+            return "screenshots/" + fileName;   // ✅ RELATIVE PATH
         } catch (Exception e) {
             Log.error("Failed to capture screenshot for test: " + testName, e);
             throw new RuntimeException(e);

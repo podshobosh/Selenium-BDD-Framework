@@ -43,7 +43,11 @@ public class HomePage {
 
     public void sendTermToSearchBox(String term) {
         HoldOn.waitForElementToBeVisible(driver, mainSearchBar);
+        mainSearchBar.clear();
         mainSearchBar.sendKeys(term);
+
+        HoldOn.waitForTextToBePresent(driver, mainSearchBar, term);
+
         Log.info("Sent search term into the search box.");
     }
 
@@ -93,6 +97,11 @@ public class HomePage {
         HoldOn.waitForElementToBeVisible(driver, siteLogo);
         return siteLogo.isDisplayed();
     }
+
+    public void waitForSearchInputToContainText(String text) {
+        HoldOn.waitForTextToBePresent(driver, mainSearchBar, text);
+    }
+
 
     public void clickSiteLogo() {
         HoldOn.waitForPreloaderToDisappear(driver);

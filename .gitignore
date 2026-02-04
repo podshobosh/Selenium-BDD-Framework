@@ -36,3 +36,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Test Execution Artifacts ###
+
+# Logs
+logs/
+*.log
+
+# Screenshots
+screenshots/
+Reports/screenshots/
+
+# Reports (generated HTML)
+Reports/*.html
