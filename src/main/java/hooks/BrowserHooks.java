@@ -12,7 +12,7 @@ public class BrowserHooks {
 
     private WebDriver driver;
 
-    @Before("@UI or @Test") // Executes before each scenario tagged with @UI
+    @Before("@UI") // Executes before each scenario tagged with @UI
 
     public void setUpBrowser() {
         Log.info("Initializing browser setup...");
@@ -21,6 +21,10 @@ public class BrowserHooks {
         driver.manage().window().maximize(); // Maximize the browser window
 
         String baseUrl = ConfigReader.getProperty("home.page.url");
+
+        if (baseUrl == null) {
+            throw new RuntimeException("home.page.url is not configured"); // fails if URL is missing
+        }
         Log.info("Navigating to: " + baseUrl);
         driver.get(baseUrl); // Navigate to the base URL
 
@@ -29,9 +33,12 @@ public class BrowserHooks {
     }
 
     @After("@UI") // Executes after each scenario tagged with @UI
-    public void tearDownBrowser() throws InterruptedException {
-       // Thread.sleep(5000);
-        DriverFactory.quitDriver(); // Quit WebDriver and clean up
+    public void tearDownBrowser() {
+        driver = DriverFactory.peekDriver();
+
+        if (driver != null){
+            DriverFactory.quitDriver();
+        }
         Log.info("Browser teardown completed.");
 
     }
