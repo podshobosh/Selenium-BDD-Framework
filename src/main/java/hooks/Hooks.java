@@ -1,5 +1,6 @@
 package hooks;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.After;
@@ -32,21 +33,28 @@ public class Hooks {
 
     @After
     public void afterScenario(Scenario scenario) {
-        driver = DriverFactory.getDriver();
+        driver = DriverFactory.peekDriver();
 
         if (scenario.isFailed()) {
             Log.error("Scenario failed: " + scenario.getName());
 
-            // Capture Base64 screenshot and attach to Extent Report
-            String base64Screenshot = ScreenshotUtils.takeScreenshotAsBase64(driver);
+            if (driver != null) {
+                try {
+                    String base64Screenshot = ScreenshotUtils.takeScreenshotAsBase64(driver);
+                    ExtentReportManager.getTest()
+                            .fail("Scenario failed: " + scenario.getName(),
+                                    MediaEntityBuilder.createScreenCaptureFromBase64String(base64Screenshot).build());
+                } catch (Exception e) {
+                    Log.error("Failed to capture screenshot", e);
+                    ExtentReportManager.getTest().fail("Scenario failed, (screenshot capture failed)");
+                }
+            }else{
+                Log.warn("Driver was null. Screenshot was not taken");
+                ExtentReportManager.getTest().fail("Scenario failed. (no Driver available)");
+            }
+        }else {
             ExtentReportManager.getTest()
-                    .fail("Scenario failed: " + scenario.getName(),
-                            com.aventstack.extentreports.MediaEntityBuilder.createScreenCaptureFromBase64String(base64Screenshot).build());
-
-            failedLogger.error("Screenshot captured for failed scenario: " + scenario.getName());
-        } else {
-            Log.info("Scenario passed: " + scenario.getName());
-            ExtentReportManager.getTest().pass("Scenario passed: " + scenario.getName());
+                    .pass("Scenario passed: " + scenario.getName());
         }
 
         Log.info("====================== ENDING SCENARIO ======================");
