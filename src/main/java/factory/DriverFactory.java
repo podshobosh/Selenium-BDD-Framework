@@ -73,6 +73,11 @@ public class DriverFactory {
         return driver;
     }
 
+    public static WebDriver peekDriver() {
+        return driver;
+    }
+
+
     // Method to quit the driver
     public static void quitDriver() {
         if (driver != null) {

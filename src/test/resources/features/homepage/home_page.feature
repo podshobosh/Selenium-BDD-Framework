@@ -4,7 +4,7 @@ Feature: Verifying HomePage Main Functionalities
   @UI @Regression @smoke
   Scenario: Verify HomePage URL and Title
     Then The page should have the title "Home - My Digital Notebook"
-    And The page URL should be "https://seleniums.com/"
+    And The page URL should be "https://www.seleniums.com/"
 
   @UI @TestHere
   Scenario: Verify the top page search functionality
