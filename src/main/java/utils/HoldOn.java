@@ -13,7 +13,12 @@ public class HoldOn {
     private static int pageLoadTimeout = ConfigReader.getIntProperty("page.load.timeout");
     private static int elementVisibilityTimeout = ConfigReader.getIntProperty("element.visibility.timeout");
 
-
+    /**
+     * @deprecated Avoid using Thread.sleep().
+     * Use explicit waits instead.
+     * This method exists ONLY for debugging and should not be used in framework logic.
+     */
+    @Deprecated
     public static void sleep(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
@@ -49,19 +54,22 @@ public class HoldOn {
 
     public static void waitForElementsToBeVisible(WebDriver driver, List<WebElement> elements) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(elementVisibilityTimeout));
-        for (WebElement e : elements){
+        for (WebElement e : elements) {
             wait.until(ExpectedConditions.visibilityOf(e));// Wait until the element is visible
         }
 
     }
-    /** Safely clicks a single element: waits clickable, then normal click, JS fallback if intercepted. */
-    public static void safeClick(WebDriver driver, WebElement element){
+
+    /**
+     * Safely clicks a single element: waits clickable, then normal click, JS fallback if intercepted.
+     */
+    public static void safeClick(WebDriver driver, WebElement element) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.elementToBeClickable(element));
-        try{
+        try {
             element.click();
-        }catch (Exception e){
+        } catch (Exception e) {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         }
 
@@ -79,7 +87,7 @@ public class HoldOn {
                 .until(driver1 -> {
                     List<WebElement> elements = driver.findElements(locator);
                     for (WebElement el : elements) {
-                        if (target.equalsIgnoreCase(el.getText().trim())){
+                        if (target.equalsIgnoreCase(el.getText().trim())) {
                             el.click();
                             return true; //success
                         }
@@ -124,7 +132,7 @@ public class HoldOn {
                                 );
 
                                 // Small pause after scroll
-                                sleep(3000);
+                                wait.until(ExpectedConditions.elementToBeClickable(e));
 
                                 // Try normal click first
                                 try {
@@ -146,7 +154,8 @@ public class HoldOn {
     }
 
     /**
-     * Wait for preloader to disappear completely
+     * This method is APP SPECIFIC - will not work as a universal method.
+     * Only works for selenium UI
      */
     public static void waitForPreloaderToDisappear(WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -157,8 +166,14 @@ public class HoldOn {
             ));
         } catch (TimeoutException e) {
             // Preloader might not exist on some pages, that's okay
-            System.out.println("Preloader not found or already disappeared");
+            Log.info("Preloader not found or already disappeared");
+
         }
+    }
+
+    public static List<WebElement> waitForElementsToBePresent(WebDriver driver, By locator, int timeoutSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
 
     public static void waitForTextToBePresent(
@@ -169,17 +184,6 @@ public class HoldOn {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(ExpectedConditions.textToBePresentInElementValue(element, expectedText));
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
