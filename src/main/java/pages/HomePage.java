@@ -40,6 +40,8 @@ public class HomePage {
     @FindBy(xpath = "//*[@id='sticky']/div/a/img[2]")
     private WebElement siteLogo;
 
+    private By preloader = By.xpath("//div[@id='preloader']");
+
 
     public void sendTermToSearchBox(String term) {
         HoldOn.waitForElementToBeVisible(driver, mainSearchBar);
@@ -93,7 +95,7 @@ public class HomePage {
     }
 
     public boolean isWebsiteLogoVisible(){
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
         HoldOn.waitForElementToBeVisible(driver, siteLogo);
         return siteLogo.isDisplayed();
     }
@@ -104,14 +106,14 @@ public class HomePage {
 
 
     public void clickSiteLogo() {
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
         HoldOn.waitForElementToBeClickable(driver, siteLogo);
         siteLogo.click();
         Log.info("Clicked on the site logo.");
     }
 
     public void clickMainMenuItemByName(String itemName) {
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
         for (WebElement menuItem : websiteMainMenu) {
             if (menuItem.getText().trim().equalsIgnoreCase(itemName)) {

@@ -82,57 +82,24 @@ public class HoldOn {
      * - Retries automatically until the element is found and clicked, or timeout is reached.
      */
     public static void clickOnElementInList(WebDriver driver, By locator, String target) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.ignoring(StaleElementReferenceException.class)
-                .until(driver1 -> {
-                    List<WebElement> elements = driver.findElements(locator);
-                    for (WebElement el : elements) {
-                        if (target.equalsIgnoreCase(el.getText().trim())) {
-                            el.click();
-                            return true; //success
-                        }
-                    }
-                    return false; // not found yet -> retry until found
-                });
-
-
-    }
-
-    /**
-     * Enhanced clickOnElementInList using List<WebElement> with preloader handling
-     * This method re-finds elements to avoid stale references
-     */
-    public static void clickOnElementInList(WebDriver driver, List<WebElement> elements, String target) {
-        // Wait for preloader to disappear first
-        waitForPreloaderToDisappear(driver);
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(defaultWaitTime));
         wait.ignoring(StaleElementReferenceException.class)
                 .ignoring(ElementClickInterceptedException.class)
                 .until(driver1 -> {
-                    // Check if preloader is still present
-                    try {
-                        WebElement preloader = driver.findElement(By.id("preloader"));
-                        if (preloader.isDisplayed()) {
-                            return false; // Preloader visible, retry
-                        }
-                    } catch (NoSuchElementException e) {
-                        // Preloader not found, that's good
-                    }
 
-                    // Iterate through the list
+                    List<WebElement> elements = driver1.findElements(locator);
+
                     for (WebElement e : elements) {
                         try {
                             String elementText = e.getText().trim();
+
                             if (elementText.equalsIgnoreCase(target)) {
                                 // Scroll element into view
-                                ((JavascriptExecutor) driver).executeScript(
-                                        "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});", e
-                                );
+                                ((JavascriptExecutor) driver1).executeScript(
+                                        "arguments[0].scrollIntoView({block: 'center'});", e);
 
                                 // Small pause after scroll
-                                wait.until(ExpectedConditions.elementToBeClickable(e));
+                                //wait.until(ExpectedConditions.elementToBeClickable(e));
 
                                 // Try normal click first
                                 try {
@@ -140,7 +107,7 @@ public class HoldOn {
                                     return true; // Success
                                 } catch (ElementClickInterceptedException ex) {
                                     // Fallback to JavaScript click
-                                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", e);
+                                    ((JavascriptExecutor) driver1).executeScript("arguments[0].click();", e);
                                     return true; // Success
                                 }
                             }
@@ -151,18 +118,20 @@ public class HoldOn {
                     }
                     return false; // Element not found, retry
                 });
+
+
     }
 
     /**
      * This method is APP SPECIFIC - will not work as a universal method.
      * Only works for selenium UI
      */
-    public static void waitForPreloaderToDisappear(WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    public static void waitForElementToDisappear(WebDriver driver, By locator) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(defaultWaitTime));
         try {
-            // Wait for preloader to become invisible
+            // Wait for element to become invisible
             wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.id("preloader")
+                    locator
             ));
         } catch (TimeoutException e) {
             // Preloader might not exist on some pages, that's okay

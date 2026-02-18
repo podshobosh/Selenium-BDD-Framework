@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -33,13 +34,15 @@ public class LoginPage {
     @FindBy(xpath = "//div[@id='login_error']//li[normalize-space() = 'ERROR: Incorrect Username or Password']")
     public WebElement errorMessage;
 
+    private By preloader = By.xpath("//div[@id='preloader']");
+
 
     public void clickLoginLink(){
         HoldOn.safeClick(driver, loginLink);
         Log.info("Verified that the Login link is visible and clicked.");
 
         // Wait for preloader to disappear after navigation
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
     }
 
@@ -55,7 +58,7 @@ public class LoginPage {
         Log.info("Verified that the Login button is visible and clicked.");
 
         // Wait for preloader to disappear after navigation
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
     }
 
     public String getErrorText(){

@@ -68,6 +68,7 @@ public class myNotesPageStepDefinition {
         myNotesPage.waitForTopicTitle(section);
         String actual = myNotesPage.getTopicTitle();
         Assert.assertEquals(section, actual);
+        Log.debug(actual);
 
 
     }

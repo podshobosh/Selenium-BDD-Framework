@@ -33,7 +33,7 @@ public class MyNotesPage {
 
 
     // dynamic list -> By (re-find fresh each time)
-    private final By topicLinksBy = By.xpath("//ul[@class='ezd-list-unstyled nav-sidebar left-sidebar-results ezd-list-unstyled']/li");
+    private final By topicLinksBy = By.xpath("//ul[contains(@class,'nav-sidebar')]/li/div/a\n");
 
     @FindBy(xpath = "//ul[@class='ezd-list-unstyled nav-sidebar left-sidebar-results ezd-list-unstyled']/li")
     List<WebElement> topicLinks;
@@ -45,6 +45,7 @@ public class MyNotesPage {
     @FindBy(xpath = "//div[@class='shortcode_title']/h1")
     private WebElement topicTitle;
 
+    private By preloader = By.xpath("//div[@id='preloader']");
 
     public List<WebElement> getTopicLinks() {
         return driver.findElements(topicLinksBy);
@@ -57,7 +58,7 @@ public class MyNotesPage {
 
 
         // Wait for preloader to disappear after navigation
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
         // Wait for topic links to be visible
         HoldOn.waitForElementsToBeVisible(driver, getTopicLinks());
@@ -66,7 +67,7 @@ public class MyNotesPage {
 
     public void validateTopicLinks() {
         // Wait for preloader first
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
         HoldOn.waitForElementsToBeVisible(driver, getTopicLinks());
         Log.info("Topic links are present");
@@ -75,6 +76,7 @@ public class MyNotesPage {
 
     public void clickOnSeleniumTopicLink() {
         HoldOn.clickOnElementInList(driver, topicLinksBy, "Selenium");
+
         Log.info("Clicked on Selenium link");
 
     }
@@ -86,24 +88,26 @@ public class MyNotesPage {
     }
 
     public void clickOnSidebarTopicLink(String link) {
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
-        HoldOn.clickOnElementInList(driver, topicLinks, link);
-        Log.info("Clicked on " + link + "link");
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.clickOnElementInList(driver,topicLinksBy , link);
+        System.out.println( " DEBBUG-------- : " +
+                driver.findElement(By.xpath("//div[@class='shortcode_title']/h1")).getText()
+        );
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
     }
 
     public void waitForTopicTitle(String expected) {
         // Wait for preloader first
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver,preloader );
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.textToBePresentInElement(topicTitle, expected));
     }
 
     public String getTopicTitle() {
         // Ensure preloader is gone before getting text
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
         HoldOn.waitForElementToBeVisible(driver, topicTitle);
         return topicTitle.getText().trim();

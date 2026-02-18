@@ -22,8 +22,10 @@ public class SearchResultsPage
     @FindBy(xpath = "//h5[@class='title']")
     private List<WebElement> resultsLinks;
 
+    private By preloader = By.xpath("//div[@id='preloader']");
+
     public boolean verifyAllSearchResultsContainSearchTerm(String term) {
-        HoldOn.waitForPreloaderToDisappear(driver);
+        HoldOn.waitForElementToDisappear(driver, preloader);
 
 
         if (resultsLinks.isEmpty()) {

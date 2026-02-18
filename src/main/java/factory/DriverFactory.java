@@ -23,6 +23,7 @@ public class DriverFactory {
         String headless = ConfigReader.getProperty("headless", "false").trim().toLowerCase();
 
 
+
         try {
             switch (browser) {
                 case "chrome":

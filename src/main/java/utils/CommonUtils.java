@@ -1,7 +1,11 @@
 package utils;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
 
 public class CommonUtils {
 
@@ -77,4 +81,61 @@ public class CommonUtils {
             return null;
         }
     }
+
+    /**
+     * Enhanced clickOnElementInList using List<WebElement> with preloader handling
+     * This method re-finds elements to avoid stale references
+     */
+//    public static void clickOnElementInList(WebDriver driver, List<WebElement> elements, String target) {
+//        // Wait for preloader to disappear first
+//        waitForElementToDisappear(driver, );
+//
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//
+//        wait.ignoring(StaleElementReferenceException.class)
+//                .ignoring(ElementClickInterceptedException.class)
+//                .until(driver1 -> {
+//                    // Check if preloader is still present
+//                    try {
+//                        WebElement preloader = driver.findElement(By.id("preloader"));
+//                        if (preloader.isDisplayed()) {
+//                            return false; // Preloader visible, retry
+//                        }
+//                    } catch (NoSuchElementException e) {
+//                        // Preloader not found, that's good
+//                    }
+//
+//                    // Iterate through the list
+//                    for (WebElement e : elements) {
+//                        try {
+//                            String elementText = e.getText().trim();
+//                            if (elementText.equalsIgnoreCase(target)) {
+//                                // Scroll element into view
+//                                ((JavascriptExecutor) driver).executeScript(
+//                                        "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});", e
+//                                );
+//
+//                                // Small pause after scroll
+//                                wait.until(ExpectedConditions.elementToBeClickable(e));
+//
+//                                // Try normal click first
+//                                try {
+//                                    e.click();
+//                                    return true; // Success
+//                                } catch (ElementClickInterceptedException ex) {
+//                                    // Fallback to JavaScript click
+//                                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", e);
+//                                    return true; // Success
+//                                }
+//                            }
+//                        } catch (StaleElementReferenceException ex) {
+//                            // Element went stale, will retry in next iteration
+//                            return false;
+//                        }
+//                    }
+//                    return false; // Element not found, retry
+//                });
+//    }
+
+
 }
