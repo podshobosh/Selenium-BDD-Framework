@@ -98,9 +98,6 @@ public class HoldOn {
                                 ((JavascriptExecutor) driver1).executeScript(
                                         "arguments[0].scrollIntoView({block: 'center'});", e);
 
-                                // Small pause after scroll
-                                //wait.until(ExpectedConditions.elementToBeClickable(e));
-
                                 // Try normal click first
                                 try {
                                     e.click();
@@ -150,7 +147,7 @@ public class HoldOn {
             WebElement element,
             String expectedText
     ) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(defaultWaitTime));
         wait.until(ExpectedConditions.textToBePresentInElementValue(element, expectedText));
     }
 

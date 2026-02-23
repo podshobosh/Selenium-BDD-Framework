@@ -35,7 +35,7 @@ public class ScreenshotUtils {
             FileUtils.copyFile(srcFile, destFile);
 
             Log.info("Screenshot saved at Reports/screenshots/");
-            return "screenshots/" + fileName;   // ✅ RELATIVE PATH
+            return "screenshots/" + fileName;   // relative path
         } catch (Exception e) {
             Log.error("Failed to capture screenshot for test: " + testName, e);
             throw new RuntimeException(e);

@@ -18,7 +18,7 @@ import java.util.logging.XMLFormatter;
 
 public class MyNotesPage {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public MyNotesPage(WebDriver driver) {
         if (driver == null) throw new IllegalArgumentException("driver is null");
@@ -35,9 +35,6 @@ public class MyNotesPage {
     // dynamic list -> By (re-find fresh each time)
     private final By topicLinksBy = By.xpath("//ul[contains(@class,'nav-sidebar')]/li/div/a\n");
 
-    @FindBy(xpath = "//ul[@class='ezd-list-unstyled nav-sidebar left-sidebar-results ezd-list-unstyled']/li")
-    List<WebElement> topicLinks;
-
 
     @FindBy(xpath = "//h1[text()='Selenium']")
     private WebElement seleniumTitle;
@@ -45,7 +42,7 @@ public class MyNotesPage {
     @FindBy(xpath = "//div[@class='shortcode_title']/h1")
     private WebElement topicTitle;
 
-    private By preloader = By.xpath("//div[@id='preloader']");
+    private final By preloader = By.xpath("//div[@id='preloader']");
 
     public List<WebElement> getTopicLinks() {
         return driver.findElements(topicLinksBy);
@@ -90,17 +87,15 @@ public class MyNotesPage {
     public void clickOnSidebarTopicLink(String link) {
         HoldOn.waitForElementToDisappear(driver, preloader);
 
-        HoldOn.clickOnElementInList(driver,topicLinksBy , link);
-        System.out.println( " DEBBUG-------- : " +
-                driver.findElement(By.xpath("//div[@class='shortcode_title']/h1")).getText()
-        );
+        HoldOn.clickOnElementInList(driver, topicLinksBy, link);
+
         HoldOn.waitForElementToDisappear(driver, preloader);
 
     }
 
     public void waitForTopicTitle(String expected) {
         // Wait for preloader first
-        HoldOn.waitForElementToDisappear(driver,preloader );
+        HoldOn.waitForElementToDisappear(driver, preloader);
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.textToBePresentInElement(topicTitle, expected));
     }
