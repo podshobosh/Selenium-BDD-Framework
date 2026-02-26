@@ -1,7 +1,8 @@
 package pages;
 
-import dev.failsafe.internal.util.Assert;
-import factory.DriverFactory;
+
+
+import lombok.Getter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -10,12 +11,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.HoldOn;
 import utils.Log;
 
-import javax.xml.xpath.XPath;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.XMLFormatter;
 
+import java.time.Duration;
+
+import java.util.List;
 public class MyNotesPage {
 
     private final WebDriver driver;
@@ -42,11 +41,26 @@ public class MyNotesPage {
     @FindBy(xpath = "//div[@class='shortcode_title']/h1")
     private WebElement topicTitle;
 
+    @Getter
+    @FindBy(xpath = "//div[@class='left-sidebar-toggle']/span[1]")
+    private WebElement hideSibeBarButton;
+
+
     private final By preloader = By.xpath("//div[@id='preloader']");
 
     public List<WebElement> getTopicLinks() {
         return driver.findElements(topicLinksBy);
     }
+
+
+
+
+
+
+
+
+
+
 
 
     public void clickMyNotesLink() {
@@ -106,6 +120,11 @@ public class MyNotesPage {
 
         HoldOn.waitForElementToBeVisible(driver, topicTitle);
         return topicTitle.getText().trim();
+    }
+
+    public void clickOnHideCategoriesButton(){
+        HoldOn.waitForElementToDisappear(driver, preloader);
+        hideSibeBarButton.click();
     }
 
 

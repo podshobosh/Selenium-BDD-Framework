@@ -73,6 +73,22 @@ public class myNotesPageStepDefinition {
 
     }
 
+    @When("user clicks the Hide Category button")
+    public void user_clicks_the_hide_category_button() {
+        myNotesPage.clickOnHideCategoriesButton();
+        HoldOn.sleep(5000);
+        Log.info("Clicked on hide side bar button");
+    }
+
+
+    @Then("categories tab should be hidden")
+    public void categories_tab_should_be_hidden() {
+        Assert.assertFalse(myNotesPage.getHideSibeBarButton().isDisplayed());
+        Log.info("Verified categories side bar is now hidden");
+    }
+
+
+
 
 
     /*
