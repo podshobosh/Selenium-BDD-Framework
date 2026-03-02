@@ -39,9 +39,6 @@ public class myNotesPageStepDefinition {
 
     @Given("User click on My Notes Tab")
     public void user_click_on_my_notes_tab() {
-//        System.out.println("[DEBUG] driver? " + DriverFactory.getDriver());
-//        System.out.println("[DEBUG] myNotesPage? " + myNotesPage);
-//        System.out.println("[DEBUG] homePage? " + homePage);
         myNotesPage.clickMyNotesLink();
     }
     @Given("Validate that topic of fields are present at the left side of the page")
@@ -76,7 +73,6 @@ public class myNotesPageStepDefinition {
     @When("user clicks the Hide Category button")
     public void user_clicks_the_hide_category_button() {
         myNotesPage.clickOnHideCategoriesButton();
-        HoldOn.sleep(5000);
         Log.info("Clicked on hide side bar button");
     }
 
@@ -84,7 +80,8 @@ public class myNotesPageStepDefinition {
     @Then("categories tab should be hidden")
     public void categories_tab_should_be_hidden() {
         Assert.assertFalse(myNotesPage.getHideSibeBarButton().isDisplayed());
-        Log.info("Verified categories side bar is now hidden");
+        //Log.info("Verified categories side bar is now hidden");
+        logAndCapture("Verified categories side bar is now hidden");
     }
 
 
